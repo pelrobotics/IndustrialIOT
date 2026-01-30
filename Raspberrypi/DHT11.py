@@ -26,3 +26,35 @@ try:
 
 except KeyboardInterrupt:
     print("Program stopped")
+
+
+
+sudo apt update
+sudo apt install python3-gpiozero python3-lgpio -y
+sudo reboot
+
+
+from gpiozero import DHT11
+from time import sleep
+
+sensor = DHT11(4)   # GPIO4
+
+print("Reading DHT11 sensor...")
+
+while True:
+    try:
+        temperature = sensor.temperature
+        humidity = sensor.humidity
+
+        if temperature is not None and humidity is not None:
+            print(f"Temperature: {temperature} °C")
+            print(f"Humidity: {humidity} %")
+            print("------------------------")
+        else:
+            print("Sensor not ready")
+
+    except RuntimeError as e:
+        print("Reading error:", e)
+
+    sleep(2)
+
