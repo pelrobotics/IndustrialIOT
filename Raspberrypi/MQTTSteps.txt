@@ -1,0 +1,52 @@
+Publisher  →  MQTT Broker  →  Subscriber
+
+STEP 1: Install MQTT Broker on Raspberry Pi
+
+sudo apt update
+sudo apt install mosquitto mosquitto-clients -y
+sudo systemctl enable mosquitto
+sudo systemctl start mosquitto
+sudo systemctl status mosquitto
+
+STEP 2: Test MQTT Locally (VERY IMPORTANT)
+
+Open Terminal 1 (Subscriber)
+
+mosquitto_sub -t test/topic
+
+Open Terminal 2 (Publisher)
+
+mosquitto_pub -t test/topic -m "Hello MQTT"
+
+STEP 3: Install Python MQTT Library
+pip3 install paho-mqtt
+
+STEP 4: MQTT Publisher (Raspberry Pi)
+
+import paho.mqtt.client as mqtt
+import time
+broker = "localhost"
+topic = "sensor/data"
+
+client = mqtt.Client()
+client.connect(broker, 1883, 60)
+
+while True:
+    message = "Temperature: 30C"
+    client.publish(topic, message)
+    print("Published:", message)
+    time.sleep(5)
+
+STEP 5: MQTT Subscriber (Raspberry Pi / Laptop)
+
+import paho.mqtt.client as mqtt
+def on_message(client, userdata, msg):
+    print(f"Received: {msg.payload.decode()}")
+
+client = mqtt.Client()
+client.connect("localhost", 1883, 60)
+
+client.subscribe("sensor/data")
+client.on_message = on_message
+
+client.loop_forever()
