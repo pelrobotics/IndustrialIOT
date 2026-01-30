@@ -8,7 +8,7 @@ sudo apt install python3-paho-mqtt
 
 STEP 2: Test MQTT Locally
 -----------------------------------
-Sender
+Sender From Raspberry Pi
 -----------------------------------
 import paho.mqtt.client as paho
 import time
@@ -17,15 +17,17 @@ def on_publish(client, userdata, mid):
         
 client = paho.Client()
 client.on_publish = on_publish
+                #HOST                      #PORT
 client.connect("broker.mqttdashboard.com", 1883)
 client.loop_start()
 
-while True:
-    client.publish("rpi/mess", "Hai RPi Master", qos=1)
+while True: 
+                  #TOPIC      #PAYLOAD       #QUALITY OF SERVICE
+    client.publish("GROUP14", "SENSOR DATA", qos=1)
     time.sleep(2)
 
 -----------------------------------
-Receiver
+Receiver On Any Raspberry Pi
 -----------------------------------
 import paho.mqtt.client as paho
  
@@ -38,7 +40,9 @@ def on_message(client, userdata, msg):
 client = paho.Client()
 client.on_subscribe = on_subscribe
 client.on_message = on_message
+              #HOST                        #PORT
 client.connect("broker.mqttdashboard.com", 1883)
-client.subscribe("rpi/mess", qos=1)
+                 #TOPIC     #QUALITY OF SERVICE
+client.subscribe("GROUP14", qos=1)
  
 client.loop_forever()
