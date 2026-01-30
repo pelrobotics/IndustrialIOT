@@ -1,0 +1,16 @@
+Step 1: Install Node-RED (Official Script)
+bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)
+
+Press Y when asked
+Wait for installation to finish
+
+Step 2: Enable Node-RED on Boot
+sudo systemctl enable nodered.service
+
+Step 3: Start Node-RED
+node-red-start
+
+Open Node-RED Dashboard
+On browser (Laptop / Pi):
+
+http://RASPBERRY_PI_IP:1880
